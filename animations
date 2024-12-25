@@ -1,0 +1,99 @@
+MainActivity.java
+java
+Copy code
+package com.example.simpleanimation;
+
+import android.os.Bundle;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+    private ImageView square;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        square = findViewById(R.id.square);
+    }
+
+    public void startAnimation(View view) {
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.rotate);
+        square.startAnimation(animation);
+    }
+}
+activity_main.xml
+xml
+Copy code
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/square"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@android:color/holo_blue_light" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Start Animation"
+        android:onClick="startAnimation" />
+</LinearLayout>
+rotate.xml (Animation File)
+Create this file in the res/anim directory.
+
+xml
+Copy code
+<rotate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="1000"
+    android:fromDegrees="0"
+    android:toDegrees="360"
+    android:pivotX="50%"
+    android:pivotY="50%" />
+Additional Animations
+You can create other animation files (res/anim) to demonstrate various effects:
+
+scale.xml
+xml
+Copy code
+<scale xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="1000"
+    android:fromXScale="1.0"
+    android:toXScale="2.0"
+    android:fromYScale="1.0"
+    android:toYScale="2.0"
+    android:pivotX="50%"
+    android:pivotY="50%" />
+fade.xml
+xml
+Copy code
+<alpha xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="1000"
+    android:fromAlpha="1.0"
+    android:toAlpha="0.0" />
+translate.xml
+xml
+Copy code
+<translate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="1000"
+    android:fromXDelta="0%"
+    android:toXDelta="50%"
+    android:fromYDelta="0%"
+    android:toYDelta="50%" />
+To Use Different Animations
+Update the startAnimation method in MainActivity.java to load a different animation. For example:
+
+java
+Copy code
+Animation animation = AnimationUtils.loadAnimation(this, R.anim.scale);
+square.startAnimation(animation);
