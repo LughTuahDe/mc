@@ -1,0 +1,106 @@
+XML:
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Temperature Converter"
+        android:textSize="24sp"
+        android:layout_gravity="center"
+        android:paddingBottom="16dp" />
+
+    <EditText
+        android:id="@+id/inputTemperature"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Temperature"
+        android:inputType="numberDecimal" />
+
+    <RadioGroup
+        android:id="@+id/conversionOptions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="8dp">
+
+        <RadioButton
+            android:id="@+id/toCelsius"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="To Celsius" />
+
+        <RadioButton
+            android:id="@+id/toFahrenheit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="To Fahrenheit" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/convertButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Convert"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:id="@+id/resultText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Result: "
+        android:textSize="18sp"
+        android:paddingTop="16dp" />
+</LinearLayout>
+
+
+JAVA:
+package com.example.temperatureconverter;
+
+import android.os.Bundle;
+import android.widget.*;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        EditText inputTemperature = findViewById(R.id.inputTemperature);
+        RadioGroup conversionOptions = findViewById(R.id.conversionOptions);
+        Button convertButton = findViewById(R.id.convertButton);
+        TextView resultText = findViewById(R.id.resultText);
+
+        convertButton.setOnClickListener(v -> {
+            try {
+                double temperature = Double.parseDouble(inputTemperature.getText().toString());
+                int selectedOption = conversionOptions.getCheckedRadioButtonId();
+
+                if (selectedOption == R.id.toCelsius) {
+                    double result = (temperature - 32) * 5 / 9;
+                    resultText.setText("Result: " + result + " °C");
+                } else if (selectedOption == R.id.toFahrenheit) {
+                    double result = (temperature * 9 / 5) + 32;
+                    resultText.setText("Result: " + result + " °F");
+                } else {
+                    resultText.setText("Please select a conversion option.");
+                }
+            } catch (NumberFormatException e) {
+                resultText.setText("Error: Invalid input.");
+            }
+        });
+    }
+}
+
+
+Android MAnifest:
+<activity android:name=".MainActivity">
+    <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+    </intent-filter>
+</activity>
