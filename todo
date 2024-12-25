@@ -1,0 +1,83 @@
+XML:
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/taskInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter a task"
+        android:inputType="text"
+        android:padding="8dp" />
+
+    <Button
+        android:id="@+id/addTaskButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Task"
+        android:layout_marginTop="8dp" />
+
+    <ListView
+        android:id="@+id/taskListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp" />
+</LinearLayout>
+
+
+java:
+package com.example.todolistapp;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.*;
+import androidx.appcompat.app.AppCompatActivity;
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity {
+    private ArrayList<String> taskList;
+    private ArrayAdapter<String> adapter;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        EditText taskInput = findViewById(R.id.taskInput);
+        Button addTaskButton = findViewById(R.id.addTaskButton);
+        ListView taskListView = findViewById(R.id.taskListView);
+
+        taskList = new ArrayList<>();
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, taskList);
+        taskListView.setAdapter(adapter);
+
+        addTaskButton.setOnClickListener(v -> {
+            String task = taskInput.getText().toString();
+            if (!task.isEmpty()) {
+                taskList.add(task);
+                adapter.notifyDataSetChanged();
+                taskInput.setText("");
+            } else {
+                Toast.makeText(this, "Please enter a task", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        taskListView.setOnItemClickListener((parent, view, position, id) -> {
+            taskList.remove(position);
+            adapter.notifyDataSetChanged();
+            Toast.makeText(this, "Task removed", Toast.LENGTH_SHORT).show();
+        });
+    }
+}
+
+
+android manifest:
+<activity android:name=".MainActivity">
+    <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+    </intent-filter>
+</activity>
