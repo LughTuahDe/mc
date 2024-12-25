@@ -1,0 +1,258 @@
+MainActivity.java
+package com.example.layouts_demo;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
+
+    public void openLinearLayout(View view) {
+        startActivity(new Intent(this, LinearLayoutActivity.class));
+    }
+
+    public void openRelativeLayout(View view) {
+        startActivity(new Intent(this, RelativeLayoutActivity.class));
+    }
+
+    public void openConstraintLayout(View view) {
+        startActivity(new Intent(this, ConstraintLayoutActivity.class));
+    }
+
+    public void openFrameLayout(View view) {
+        startActivity(new Intent(this, FrameLayoutActivity.class));
+    }
+
+    public void openTableLayout(View view) {
+        startActivity(new Intent(this, TableLayoutActivity.class));
+    }
+}
+Layout XML Files
+activity_main.xml
+xml
+Copy code
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Linear Layout"
+        android:onClick="openLinearLayout" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Relative Layout"
+        android:onClick="openRelativeLayout" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Constraint Layout"
+        android:onClick="openConstraintLayout" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Frame Layout"
+        android:onClick="openFrameLayout" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Table Layout"
+        android:onClick="openTableLayout" />
+</LinearLayout>
+Other Activities and Layouts
+LinearLayoutActivity.java
+java
+Copy code
+package com.example.layouts_demo;
+
+import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class LinearLayoutActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_linear_layout);
+    }
+}
+activity_linear_layout.xml
+xml
+Copy code
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This is LinearLayout" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button 1" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button 2" />
+</LinearLayout>
+RelativeLayoutActivity.java
+java
+Copy code
+package com.example.layouts_demo;
+
+import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class RelativeLayoutActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_relative_layout);
+    }
+}
+activity_relative_layout.xml
+xml
+Copy code
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This is RelativeLayout" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textView"
+        android:text="Button 1" />
+</RelativeLayout>
+ConstraintLayoutActivity.java
+java
+Copy code
+package com.example.layouts_demo;
+
+import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class ConstraintLayoutActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_constraint_layout);
+    }
+}
+activity_constraint_layout.xml
+xml
+Copy code
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="This is ConstraintLayout"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button 1"
+        app:layout_constraintTop_toBottomOf="@id/textView"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+FrameLayoutActivity.java
+java
+Copy code
+package com.example.layouts_demo;
+
+import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class FrameLayoutActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_frame_layout);
+    }
+}
+activity_frame_layout.xml
+xml
+Copy code
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="This is FrameLayout" />
+</FrameLayout>
+TableLayoutActivity.java
+java
+Copy code
+package com.example.layouts_demo;
+
+import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class TableLayoutActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_table_layout);
+    }
+}
+activity_table_layout.xml
+xml
+Copy code
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TableRow>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Row 1 Col 1" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Row 1 Col 2" />
+    </TableRow>
+
+    <TableRow>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Row 2 Col 1" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Row 2 Col 2" />
+    </TableRow>
+</TableLayout>
