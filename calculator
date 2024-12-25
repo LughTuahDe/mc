@@ -1,0 +1,123 @@
+XML:
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/input1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter first number"
+        android:inputType="numberDecimal" />
+
+    <EditText
+        android:id="@+id/input2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter second number"
+        android:inputType="numberDecimal" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/addButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+" />
+
+        <Button
+            android:id="@+id/subtractButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-" />
+
+        <Button
+            android:id="@+id/multiplyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="×" />
+
+        <Button
+            android:id="@+id/divideButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="÷" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/resultText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Result: "
+        android:textSize="18sp"
+        android:paddingTop="16dp" />
+</LinearLayout>
+
+
+JAVA:
+package com.example.myapp;
+
+import android.os.Bundle;
+import android.widget.*;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class CalculatorActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.calculator_activity);
+
+        EditText input1 = findViewById(R.id.input1);
+        EditText input2 = findViewById(R.id.input2);
+        Button addButton = findViewById(R.id.addButton);
+        Button subtractButton = findViewById(R.id.subtractButton);
+        Button multiplyButton = findViewById(R.id.multiplyButton);
+        Button divideButton = findViewById(R.id.divideButton);
+        TextView resultText = findViewById(R.id.resultText);
+
+        addButton.setOnClickListener(v -> calculate(input1, input2, resultText, "+"));
+        subtractButton.setOnClickListener(v -> calculate(input1, input2, resultText, "-"));
+        multiplyButton.setOnClickListener(v -> calculate(input1, input2, resultText, "*"));
+        divideButton.setOnClickListener(v -> calculate(input1, input2, resultText, "/"));
+    }
+
+    private void calculate(EditText input1, EditText input2, TextView resultText, String operator) {
+        try {
+            double num1 = Double.parseDouble(input1.getText().toString());
+            double num2 = Double.parseDouble(input2.getText().toString());
+            double result;
+
+            switch (operator) {
+                case "+":
+                    result = num1 + num2;
+                    break;
+                case "-":
+                    result = num1 - num2;
+                    break;
+                case "*":
+                    result = num1 * num2;
+                    break;
+                case "/":
+                    if (num2 != 0) result = num1 / num2;
+                    else {
+                        resultText.setText("Error: Division by zero");
+                        return;
+                    }
+                    break;
+                default:
+                    resultText.setText("Invalid operation");
+                    return;
+            }
+
+            resultText.setText("Result: " + result);
+        } catch (NumberFormatException e) {
+            resultText.setText("Error: Invalid input");
+        }
+    }
+}
