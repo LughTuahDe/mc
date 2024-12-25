@@ -1,0 +1,190 @@
+MainActivity.java
+java
+Copy code
+package com.example.databaseexample;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+    private EditText nameInput, ageInput;
+    private DatabaseHelper dbHelper;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        nameInput = findViewById(R.id.nameInput);
+        ageInput = findViewById(R.id.ageInput);
+        dbHelper = new DatabaseHelper(this);
+    }
+
+    public void insertData(View view) {
+        String name = nameInput.getText().toString();
+        String age = ageInput.getText().toString();
+
+        if (name.isEmpty() || age.isEmpty()) {
+            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+        } else {
+            boolean isInserted = dbHelper.insertData(name, Integer.parseInt(age));
+            if (isInserted) {
+                Toast.makeText(this, "Data Inserted", Toast.LENGTH_SHORT).show();
+                nameInput.setText("");
+                ageInput.setText("");
+            } else {
+                Toast.makeText(this, "Insertion Failed", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    public void viewData(View view) {
+        Intent intent = new Intent(this, ViewDataActivity.class);
+        startActivity(intent);
+    }
+}
+DatabaseHelper.java
+java
+Copy code
+package com.example.databaseexample;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+public class DatabaseHelper extends SQLiteOpenHelper {
+    private static final String DATABASE_NAME = "UserDatabase.db";
+    private static final String TABLE_NAME = "users";
+    private static final String COL_ID = "id";
+    private static final String COL_NAME = "name";
+    private static final String COL_AGE = "age";
+
+    public DatabaseHelper(Context context) {
+        super(context, DATABASE_NAME, null, 1);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        String createTable = "CREATE TABLE " + TABLE_NAME + " (" +
+                COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COL_NAME + " TEXT, " +
+                COL_AGE + " INTEGER)";
+        db.execSQL(createTable);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(db);
+    }
+
+    public boolean insertData(String name, int age) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COL_NAME, name);
+        values.put(COL_AGE, age);
+        long result = db.insert(TABLE_NAME, null, values);
+        return result != -1;
+    }
+
+    public Cursor getAllData() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+    }
+}
+ViewDataActivity.java
+java
+Copy code
+package com.example.databaseexample;
+
+import android.database.Cursor;
+import android.os.Bundle;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class ViewDataActivity extends AppCompatActivity {
+    private DatabaseHelper dbHelper;
+    private TextView displayData;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_view_data);
+
+        displayData = findViewById(R.id.displayData);
+        dbHelper = new DatabaseHelper(this);
+
+        loadData();
+    }
+
+    private void loadData() {
+        Cursor cursor = dbHelper.getAllData();
+        if (cursor.getCount() == 0) {
+            displayData.setText("No data found");
+        } else {
+            StringBuilder data = new StringBuilder();
+            while (cursor.moveToNext()) {
+                data.append("ID: ").append(cursor.getInt(0))
+                    .append(", Name: ").append(cursor.getString(1))
+                    .append(", Age: ").append(cursor.getInt(2))
+                    .append("\n");
+            }
+            displayData.setText(data.toString());
+        }
+        cursor.close();
+    }
+}
+activity_main.xml
+xml
+Copy code
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/nameInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Name" />
+
+    <EditText
+        android:id="@+id/ageInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Age"
+        android:inputType="number" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Insert Data"
+        android:onClick="insertData" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="View Data"
+        android:onClick="viewData" />
+</LinearLayout>
+activity_view_data.xml
+xml
+Copy code
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/displayData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp" />
+</ScrollView>
