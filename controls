@@ -1,0 +1,111 @@
+XML:
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter your name" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Submit" />
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radio1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Option 1" />
+
+            <RadioButton
+                android:id="@+id/radio2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Option 2" />
+        </RadioGroup>
+
+        <CheckBox
+            android:id="@+id/checkbox1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Check me!" />
+
+        <CheckBox
+            android:id="@+id/checkbox2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Or me!" />
+
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Type something" />
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_camera" />
+
+        <ToggleButton
+            android:id="@+id/toggleButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOn="On"
+            android:textOff="Off" />
+    </LinearLayout>
+</ScrollView>
+
+
+JAVA: 
+package com.example.myapp;
+
+import android.os.Bundle;
+import android.widget.*;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        EditText editText = findViewById(R.id.editText);
+        Button button = findViewById(R.id.button);
+        AutoCompleteTextView autoCompleteTextView = findViewById(R.id.autoCompleteTextView);
+        ImageButton imageButton = findViewById(R.id.imageButton);
+        ToggleButton toggleButton = findViewById(R.id.toggleButton);
+
+        String[] suggestions = {"Apple", "Banana", "Cherry"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, suggestions);
+        autoCompleteTextView.setAdapter(adapter);
+
+        button.setOnClickListener(v -> {
+            String name = editText.getText().toString();
+            Toast.makeText(MainActivity.this, "Hello, " + name, Toast.LENGTH_SHORT).show();
+        });
+
+        toggleButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            Toast.makeText(MainActivity.this, isChecked ? "Toggle On" : "Toggle Off", Toast.LENGTH_SHORT).show();
+        });
+
+        imageButton.setOnClickListener(v -> Toast.makeText(MainActivity.this, "Image Button Clicked", Toast.LENGTH_SHORT).show());
+    }
+}
